@@ -6,8 +6,5 @@ KIMERA is a scientific tool for the study of mineral dissolution. It implements 
 
 KIMERA was written by Pablo Martin, and version v1.0 was published in 2020
 
-Check details in 
-
-Martin, P., Gaitero, J. J., Dolado, J. S., & Manzano, H. (2020). KIMERA: A Kinetic Montecarlo Code for Mineral Dissolution. Minerals, 10(9), 825.
-
-![a]https://www.mdpi.com/2075-163X/10/9/825/htm
+Check details in "Martin, P., Gaitero, J. J., Dolado, J. S., & Manzano, H. (2020). KIMERA: A Kinetic Montecarlo Code for Mineral Dissolution. Minerals, 10(9), 825"
+https://www.mdpi.com/2075-163X/10/9/825/htm
