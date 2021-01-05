@@ -1,0 +1,69 @@
+----------------------------------------------------
+----------------------------------------------------
+The goal of a Kimera file is to enhance the efficiency of succesive simulations with the same system.
+The data in a kimera file is as follows:
+1- Cells and their corresponding atoms forming the box of the system.
+Next code in applied in the format (type_atom):
+      1:  NORMAL
+      -1: INSOLUBLE
+      -2: REVOMED_ATOM (it is already dissolved)
+2- Neighbours of each atom and the  distance to each one.
+3- Affected atoms for every atom. An affected atom dissolves as soon as the father does.
+4- Linked atoms, related with the neighbour by the order that they follow in this file. The 
+contribution of one neighbour is only considered if the linked atom exist.
+Next code in applied in the format (type_link):
+      0:  NOT LINKED
+      1:  LINKED
+      -1: LINKED TO A DISSOLVED ATOM
+----------------------------------------------------
+----------------------------------------------------
+KIMERA_FORMAT
+----------------------------------------------------
+----------------------------------------------------
+CELL 0
+0   Si   1   2.505   0   0
+1   Si   1   -1.2525   2.16939   3.64667
+2   Si   1   1.2525   2.16939   1.82333
+CELL 1
+9   Si   1   2.505   -9.79754e-013   5.47
+10   Si   1   -1.2525   2.16939   9.11667
+11   Si   1   1.2525   2.16939   7.29333
+12   O   1   1.59543   0.92112   6.38167
+CELL (int)cell_id
+(int)atom_id    (text)element   (int)type_atom   (double)position_x  (double)position_y  (double)position_z  
+(int)atom_id    (text)element   (int)type_atom   (double)position_x  (double)position_y  (double)position_z  
+(int)atom_id    (text)element   (int)type_atom   (double)position_x  (double)position_y  (double)position_z  
+(int)atom_id    (text)element   (int)type_atom   (double)position_x  (double)position_y  (double)position_z  
+...   ...   ...   ...   ...   ...
+...   ...   ...   ...   ...   ...
+CELL (int)cell_id
+(int)atom_id    (text)element   (int)type_atom   (double)position_x  (double)position_y  (double)position_z  
+(int)atom_id    (text)element   (int)type_atom   (double)position_x  (double)position_y  (double)position_z  
+...   ...   ...   ...   ...   ...
+...   ...   ...   ...   ...   ...
+NEIGHBORS 
+0   2   3.09832   407   3.09832   405   5.01   45   5.01   1   5.66774   856   5.66774   406   4.42416   451   4.42416   
+1   2   3.09832   4052   3.09832   54   3.09832   4059   3.09832   4051   5.01   451   5.01   496   5.01   4456   5.01   0   5.66774   
+2   0   3.09832   1   3.09832   45   3.09832   451   3.09832   407   5.01   47   5.01   4052   5.01   452   5.01   4059   5.66774
+(int)atom_id  (int)neighbour_id  (double)distance_atom_neighbour  (int)neighbour_id  (double)distance_atom_neighbour  ...   ... 
+(int)atom_id  (int)neighbour_id  (double)distance_atom_neighbour  (int)neighbour_id  (double)distance_atom_neighbour  ...   ... 
+(int)atom_id  (int)neighbour_id  (double)distance_atom_neighbour  (int)neighbour_id  (double)distance_atom_neighbour  ...   ... 
+...   ...   ...   ...   ...   ...   ...
+...   ...   ...   ...   ...   ...   ...
+...   ...   ...   ...   ...   ...   ...
+AFFECTED
+0   3   411   
+1   7   8   4054   4055   
+2   3   5   6   8   
+(int)atom_id    (int)affected_id    (int)affected_id    ...   ...
+(int)atom_id    (int)affected_id    (int)affected_id    ...   ...
+...   ...   ...   ...   ...   ...  
+...   ...   ...   ...   ...   ...  
+LINKED 
+0  L  0  L  0  L  1   407  L  1   2  L  1   2  L  1   407  L  1   407  L  1   2
+1  L  0  L  0  L  0  L  0  L  1   4052  L  1   2  L  1   54  L  1   4059  L  1   2  L  1   4052  L  1   54
+2  L  0  L  0  L  0  L  0  L  1   0  L  1   45  L  1   1  L  1   451  L  1   1  L  1   451  L  1   451  L  1   1
+(int)atom_id  L (int)type_link  (int)linked_id  (int)linked_id   ...    L (int)type_link  (int)linked_id  (int)linked_id   ...
+(int)atom_id  L (int)type_link  (int)linked_id  (int)linked_id   ...    L (int)type_link  (int)linked_id  (int)linked_id   ...
+...  ... ...  ...  ...   ...    ... ...  ...  ...   ...
+...  ... ...  ...  ...   ...    ... ...  ...  ...   ...

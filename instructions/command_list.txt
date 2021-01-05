@@ -1,0 +1,360 @@
+///////////QUICK GUIDE KIMERA COMMANDS/////////// by  Pablo Martín García
+-- Here indicates a comment, but any word different from a command has no effect.
+(*) If READ_SYSTEM_FROM_KIMERA_FILE is used, the change of these parameters is possible.
+(**) If READ_SYSTEM_FROM_KIMERA_FILE is used, this command is compulsary as was in the original definition. Only the change of the ED and EP, FFD, DG* values is possible.
+(***) If READ_SYSTEM_FROM_KIMERA_FILE is used, they are not possible to be used or have no effect.
+
+///////////Cell/////////////
+
+DIMENSION_A                        (int)				--(**)
+DIMENSION_B                        (int)				--(**)
+DIMENSION_C                        (int)				--(**)
+
+CELL_A                             (double)				--(**)
+CELL_B                             (double)				--(**)
+CELL_C                             (double)				--(**)
+
+CELL_ALPHA                         (double)				--(**)
+CELL_BETA                          (double)				--(**)
+CELL_GAMMA                         (double)				--(**)
+
+POSITION                           (text)atom_type       (double)x        (double)y        (double)z      (double)occupancy			--(***)
+READ_POSITIONS_FROM_XYZ_FILE       (text)path_xyz_file																				--(***)
+READ_SYSTEM_FROM_KIMERA_FILE       (text)path_kimera_file
+
+
+///////////Simulation Parameters/////////////
+
+DELTA_G*                            (double)          --(*)
+DISSOLUTION_FUNDAMENTAL_FREQUENCY   (double)          --(*)
+PRECIPITATION_FUNDAMENTAL_FREQUENCY (double)          --(*)
+
+TARGET_TIME                         (double)              ---TARGET_TIME & ESTIMATE_TIME & TARGET_STEP incompatible---          --(*)
+ESTIMATE_TIME					                   --(*)
+TARGET_STEP					        (int)          --(*)
+
+PERIODICITY                         (optional)A  (optional)B  (optional)C
+
+DISTANCE_ACCURACY                   (double)                 --- distance threshold to group neighbours in a sligh diferent distance. Initial value 0.0001
+
+PARALLELIZE_SIMULATION              (int)cores             --(*)          
+
+LINEAL_SEARCH                                              --(*)
+
+INITIAL_KIMERA_STATE
+FINAL_KIMERA_STATE                                         --(*)
+
+SEED_BOX                            (int)                   --(***)
+SEED_SIMULATION                     (int)                   ---PARALLELIZE_SIMULATION & SEED_SIMULATION incompatible---     --(*)
+
+DATA_ANALYSIS                       (int)                   --(*)
+MEAN_DISSOLVED_ANALYSIS             (int)                   --(*)
+LAYER_ANALYSIS                      (optional)A   (optional)B  (optional)C  (int)       --(*)
+
+BOX_FRAMES                          (int)                    --(*)
+SURFACE_FRAMES                      (int)                    --(*)
+
+SET_MASS                           (text)atom_type       (double)mass           -- atomic mass units (a)            --(*)
+
+WORK_NAME                           (text)                   --(*)
+
+///////////Events/////////////    --(**)
+
+---One (or more, but usually one) DEFINE_DISSOLUTION_EVENT command for each target_atom_type
+
+DEFINE_DISSOLUTION_EVENT            (text)target_atom_type                    ---At least one of the following "Neighbour" commands is compulsary for running a simulation. It is possible to repeat commands as much as needed. Each "Neighbour" command adds its contribution to the total energy barrier.
+                                                 
+                                                 (optional line) NEIGHBOUR                    (text)target_neighbour_type   (double)distance_to_neighbour       (double)ED_in_KT_units       (double)EP_in_KT_units        (int)neighbours_to_bulk          
+ 
+                                                 (optional line) NEIGHBOUR_LINKED             (text)target_neighbour_type   (double)distance_to_neighbour       LINK  (text)target_linked_type    (double)distance_from_origin_to_linked    (double)distance_from_neighbour_to_linked
+                                                                                                                                                                LINK  (text)target_linked_type    (double)distance_from_origin_to_linked    (double)distance_from_neighbour_to_linked
+                                                                                                                                                                LINK  ........................    ......................................    .........................................    (double)ED_in_KT_units       (double)EP_in_KT_units      (int)neighbours_to_bulk
+                                                                                                                                                                
+                                                 (optional line) NEIGHBOUR_LINKED_DISSOLVED   (text)target_neighbour_type   (double)distance_to_neighbour       LINK  (text)target_linked_type    (double)distance_from_origin_to_linked    (double)distance_from_neighbour_to_linked
+                                                                                                                                                                LINK  (text)target_linked_type    (double)distance_from_origin_to_linked    (double)distance_from_neighbour_to_linked
+                                                                                                                                                                LINK  ........................    ......................................    .........................................    (double)ED_in_KT_units       (double)EP_in_KT_units      (int)neighbours_to_bulk        
+                                                                                                                                                                                                                                                                                                                                              
+                                                 (optional line) NEIGHBOUR_DIRECT_LIST         (text)target_neighbour_type   (double)distance_to_neighbour      LIST_LENGTH   (int)list_length       (double)ED1  (double)EP1    (double)ED2  (double)EP2   .........    .........    (int)neighbours_to_bulk         --list_length = number of Ed OR Ep values
+                                                      
+                                                 (optional line) NEIGHBOUR_LINKED_DIRECT_LIST  (text)target_neighbour_type   (double)distance_to_neighbour      LINK  (text)target_linked_type    (double)distance_from_origin_to_linked    (double)distance_from_neighbour_to_linked
+                                                                                                                                                                LINK  (text)target_linked_type    (double)distance_from_origin_to_linked    (double)distance_from_neighbour_to_linked
+                                                                                                                                                                LINK  ........................    ......................................    .........................................                                                                   
+                                                                                                                                                                LIST_LENGTH   (int)list_length       (double)ED1  (double)EP1    (double)ED2  (double)EP2   .........    .........    (int)neighbours_to_bulk         --list_length = number of Ed OR Ep values
+                                                 
+                                                 (optional line) NEIGHBOUR_LINKED_DISSOLVED_DIRECT_LIST   (text)target_neighbour_type   (double)distance_to_neighbour       LINK  (text)target_linked_type    (double)distance_from_origin_to_linked    (double)distance_from_neighbour_to_linked
+                                                                                                                                                                            LINK  (text)target_linked_type    (double)distance_from_origin_to_linked    (double)distance_from_neighbour_to_linked
+                                                                                                                                                                            LINK  ........................    ......................................    .........................................                                                                   
+                                                                                                                                                                            LIST_LENGTH   (int)list_length       (double)ED1  (double)EP1    (double)ED2  (double)EP2   .........    .........    (int)neighbours_to_bulk         --list_length = number of Ed OR Ep values
+                                                 (optional line) AFFECTED                     (text)target_affected_type    (double)distance_to_affected
+                                                                 .........                    ...........................   ............................
+                                                 (optional line) FFD                          (double)dissolution_fundamental_frequency
+                                                 (optional line) FFP                          (double)precipitation_fundamental_frequency
+                                                 (optional line) DG*                          (double)event_delta_G
+                                                 
+                                                 
+//////////////////////////////////////////////////
+///////////CHANGE_TYPE OF INITIAL BOX/////////////   --(***)  (All of the rest)
+///////////TO ALL/////////////
+
+CHANGE_AB_PLANE_TYPE                            (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_b    (text)final_atom_type      --pos_cell start at 0
+CHANGE_AC_PLANE_TYPE                            (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_c    (text)final_atom_type      --pos_cell start at 0
+CHANGE_BC_PLANE_TYPE                            (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_b   (int)length_c    (text)final_atom_type      --pos_cell start at 0
+
+CHANGE_CUBE_TYPE                               (double)x    (double)y    (double)z    (double)side  (text)final_atom_type
+
+CHANGE_XY_DISLOCATION_TYPE                     (double)x    (double)y   (double)radius  (text)final_atom_type  
+                                                    (optional line) FROM_Z_TO_Z          (double)bot_z       (double)top_z
+                                                    (optional line) ANGLE_XZ_ANGLE_YZ    (double)angle_xz    (double)angle_yz
+
+CHANGE_XZ_DISLOCATION_TYPE                     (double)x    (double)z   (double)radius   (text)final_atom_type   
+                                                    (optional line) FROM_Y_TO_Y          (double)bot_y       (double)top_y
+                                                    (optional line) ANGLE_XY_ANGLE_ZY    (double)angle_xz    (double)angle_yz
+
+CHANGE_YZ_DISLOCATION_TYPE                     (double)y    (double)z   (double)radius   (text)final_atom_type   
+                                                   (optional line) FROM_X_TO_X          (double)bot_x       (double)top_x
+                                                   (optional line) ANGLE_YX_ANGLE_ZX    (double)angle_yx    (double)angle_zx
+
+CHANGE_PLANE_TYPE                              (double)A    (double)B    (double)C    (double)D   (double)distance   (text)final_atom_type
+CHANGE_SPHERE_TYPE                             (double)x    (double)y    (double)z    (double)radius  (text)final_atom_type
+CHANGE_ELLIPSOID_TYPE                          (double)x    (double)y    (double)z    (double)radiusx     (double)radiusy    (double)radiusz    (text)final_atom_type
+CHANGE_GENERAL_ELLIPSOID_TYPE                  (double)A    (double)B    (double)C    (double)D    (double)E   (double)F   (double)G   (double)H   (double)J   (double)K    (text)final_atom_type    --Ax^2+By^2+Cz^2+Dxy+Exz+Fyz+Gx+Hy+Jz+K<1
+
+
+///////////TO TYPE/////////////
+
+CHANGE_AB_PLANE_TYPE_TO_TYPE                   (text)atom_type  (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_b    (text)final_atom_type      --pos_cell start at 0
+CHANGE_AC_PLANE_TYPE_TO_TYPE                   (text)atom_type  (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_b   (int)length_c    (text)final_atom_type      --pos_cell start at 0
+CHANGE_BC_PLANE_TYPE_TO_TYPE                   (text)atom_type  (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_c    (text)final_atom_type      --pos_cell start at 0
+
+CHANGE_CUBE_TYPE_TO_TYPE                       (text)atom_type  (double)x    (double)y    (double)z    (double)side  (text)final_atom_type
+
+CHANGE_XY_DISLOCATION_TYPE_TO_TYPE             (text)atom_type  (double)x    (double)y   (double)radius  (text)final_atom_type  
+                                                    (optional line) FROM_Z_TO_Z          (double)bot_z       (double)top_z
+                                                    (optional line) ANGLE_XZ_ANGLE_YZ    (double)angle_xz    (double)angle_yz
+
+CHANGE_XZ_DISLOCATION_TYPE_TO_TYPE             (text)atom_type  (double)x    (double)z   (double)radius   (text)final_atom_type   
+                                                    (optional line) FROM_Y_TO_Y          (double)bot_y       (double)top_y
+                                                    (optional line) ANGLE_XY_ANGLE_ZY    (double)angle_xz    (double)angle_yz
+
+CHANGE_YZ_DISLOCATION_TYPE_TO_TYPE             (text)atom_type  (double)y    (double)z   (double)radius   (text)final_atom_type   
+                                                   (optional line) FROM_X_TO_X          (double)bot_x       (double)top_x
+                                                   (optional line) ANGLE_YX_ANGLE_ZX    (double)angle_yx    (double)angle_zx
+
+CHANGE_PLANE_TYPE_TO_TYPE                      (text)atom_type  (double)A    (double)B    (double)C    (double)D   (double)distance   (text)final_atom_type
+CHANGE_SPHERE_TYPE_TO_TYPE                     (text)atom_type  (double)x    (double)y    (double)z    (double)radius  (text)final_atom_type
+CHANGE_ELLIPSOID_TYPE_TO_TYPE                  (text)atom_type  (double)x    (double)y    (double)z    (double)radiusx     (double)radiusy    (double)radiusz    (text)final_atom_type
+CHANGE_GENERAL_ELLIPSOID_TYPE_TO_TYPE          (text)atom_type  (double)A    (double)B    (double)C    (double)D    (double)E   (double)F   (double)G   (double)H   (double)J   (double)K    (text)final_atom_type    --Ax^2+By^2+Cz^2+Dxy+Exz+Fyz+Gx+Hy+Jz+K<1
+                                                
+                                                 
+//////////////////////////////////                                                 
+///////////TOPOGRAPHY/////////////  	--(***)
+///////////TO ALL/////////////
+///////////by x y z/////////////
+
+ADD_XY_DISLOCATION                  (double)x    (double)y   (double)radius     
+                                                 (optional line) FROM_Z_TO_Z          (double)bot_z       (double)top_z
+                                                 (optional line) ANGLE_XZ_ANGLE_YZ    (double)angle_xz    (double)angle_yz
+                                                 
+ADD_XZ_DISLOCATION                  (double)x    (double)z   (double)radius     
+                                                 (optional line) FROM_Y_TO_Y          (double)bot_y       (double)top_y
+                                                 (optional line) ANGLE_XY_ANGLE_ZY    (double)angle_xz    (double)angle_yz
+                                                 
+ADD_YZ_DISLOCATION                  (double)y    (double)z   (double)radius     
+                                                 (optional line) FROM_X_TO_X          (double)bot_x       (double)top_x
+                                                 (optional line) ANGLE_YX_ANGLE_ZX    (double)angle_yx    (double)angle_zx
+                                                 
+ADD_CUBE                            (double)x    (double)y    (double)z    (double)side       
+REMOVE_CUBE                         (double)x    (double)y    (double)z    (double)side
+DEFINE_INSOLUBLE_CUBE               (double)x    (double)y    (double)z    (double)side
+
+ADD_SPHERE                          (double)x    (double)y    (double)z    (double)radius 
+REMOVE_SPHERE                       (double)x    (double)y    (double)z    (double)radius 
+DEFINE_INSOLUBLE_SPHERE             (double)x    (double)y    (double)z    (double)radius 
+
+ADD_ELLIPSOID                       (double)x    (double)y    (double)z    (double)radiusx     (double)radiusy    (double)radiusz
+REMOVE_ELLIPSOID                    (double)x    (double)y    (double)z    (double)radiusx     (double)radiusy    (double)radiusz
+DEFINE_INSOLUBLE_ELLIPSOID          (double)x    (double)y    (double)z    (double)radiusx     (double)radiusy    (double)radiusz
+
+ADD_GENERAL_ELLIPSOID               (double)A    (double)B    (double)C    (double)D    (double)E   (double)F   (double)G   (double)H   (double)J   (double)K     --Ax^2+By^2+Cz^2+Dxy+Exz+Fyz+Gx+Hy+Jz+K<1 
+REMOVE_GENERAL_ELLIPSOID            (double)A    (double)B    (double)C    (double)D    (double)E   (double)F   (double)G   (double)H   (double)J   (double)K     --Ax^2+By^2+Cz^2+Dxy+Exz+Fyz+Gx+Hy+Jz+K<1
+DEFINE_INSOLUBLE_GENERAL_ELLIPSOID  (double)A    (double)B    (double)C    (double)D    (double)E   (double)F   (double)G   (double)H   (double)J   (double)K     --Ax^2+By^2+Cz^2+Dxy+Exz+Fyz+Gx+Hy+Jz+K<1
+
+DEFINE_INSOLUBLE_PLANE              (double)A    (double)B    (double)C    (double)D   (double)distance
+REMOVE_PLANE                        (double)A    (double)B    (double)C    (double)D   (double)distance
+ADD_PLANE                           (double)A    (double)B    (double)C    (double)D   (double)distance
+                                                     
+///////////by cells/////////////                                  
+                                                              
+DEFINE_AB_INSOLUBLE_CELLS           (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_b      --pos_cell start at 0
+DEFINE_BC_INSOLUBLE_CELLS           (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_b   (int)length_c      --pos_cell start at 0
+DEFINE_AC_INSOLUBLE_CELLS           (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_c      --pos_cell start at 0
+
+                         
+REMOVE_AB_PLANE_BY_CELLS            (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_b      --pos_cell start at 0                                       
+REMOVE_BC_PLANE_BY_CELLS            (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_b   (int)length_c      --pos_cell start at 0                                       
+REMOVE_AC_PLANE_BY_CELLS            (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_c      --pos_cell start at 0 
+
+ADD_AB_PLANE_BY_CELLS               (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_b      --pos_cell start at 0                                       
+ADD_BC_PLANE_BY_CELLS               (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_b   (int)length_c      --pos_cell start at 0                                       
+ADD_AC_PLANE_BY_CELLS               (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_c      --pos_cell start at 0         
+
+ADD_CELL                            (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c                                     --pos_cell start at 0 
+REMOVE_CELL                         (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c                                     --pos_cell start at 0 
+
+///////////TO A TYPE OF ATOM/////////////
+///////////by x y z/////////////
+
+ADD_XY_DISLOCATION_TO_TYPE                      (text)atom_type  (double)x    (double)y   (double)radius     
+                                                       (optional line) FROM_Z_TO_Z          (double)bot_z       (double)top_z
+                                                       (optional line) ANGLE_XZ_ANGLE_YZ    (double)angle_xz    (double)angle_yz
+                                                 
+ADD_XZ_DISLOCATION_TO_TYPE                      (text)atom_type  (double)x    (double)z   (double)radius     
+                                                             (optional line) FROM_Y_TO_Y          (double)bot_y       (double)top_y
+                                                             (optional line) ANGLE_XY_ANGLE_ZY    (double)angle_xz    (double)angle_yz
+                                                 
+ADD_YZ_DISLOCATION_TO_TYPE                      (text)atom_type  (double)y    (double)z   (double)radius     
+                                                             (optional line) FROM_X_TO_X          (double)bot_x       (double)top_x
+                                                             (optional line) ANGLE_YX_ANGLE_ZX    (double)angle_yx    (double)angle_zx
+                                                 
+ADD_CUBE_TO_TYPE                                (text)atom_type  (double)x    (double)y    (double)z    (double)side       
+REMOVE_CUBE_TO_TYPE                             (text)atom_type  (double)x    (double)y    (double)z    (double)side
+DEFINE_INSOLUBLE_CUBE_TO_TYPE                   (text)atom_type  (double)x    (double)y    (double)z    (double)side
+
+ADD_SPHERE_TO_TYPE                              (text)atom_type  (double)x    (double)y    (double)z    (double)radius 
+REMOVE_SPHERE_TO_TYPE                           (text)atom_type  (double)x    (double)y    (double)z    (double)radius 
+DEFINE_INSOLUBLE_SPHERE_TO_TYPE                 (text)atom_type  (double)x    (double)y    (double)z    (double)radius 
+
+ADD_ELLIPSOID_TO_TYPE                           (text)atom_type  (double)x    (double)y    (double)z    (double)radiusx     (double)radiusy    (double)radiusz
+REMOVE_ELLIPSOID_TO_TYPE                        (text)atom_type  (double)x    (double)y    (double)z    (double)radiusx     (double)radiusy    (double)radiusz
+DEFINE_INSOLUBLE_ELLIPSOID_TO_TYPE              (text)atom_type  (double)x    (double)y    (double)z    (double)radiusx     (double)radiusy    (double)radiusz
+
+ADD_GENERAL_ELLIPSOID_TO_TYPE                   (text)atom_type  (double)A    (double)B    (double)C    (double)D    (double)E   (double)F   (double)G   (double)H   (double)J   (double)K     --Ax^2+By^2+Cz^2+Dxy+Exz+Fyz+Gx+Hy+Jz+K<1 
+REMOVE_GENERAL_ELLIPSOID_TO_TYPE                (text)atom_type  (double)A    (double)B    (double)C    (double)D    (double)E   (double)F   (double)G   (double)H   (double)J   (double)K     --Ax^2+By^2+Cz^2+Dxy+Exz+Fyz+Gx+Hy+Jz+K<1
+DEFINE_INSOLUBLE_GENERAL_ELLIPSOID_TO_TYPE      (text)atom_type  (double)A    (double)B    (double)C    (double)D    (double)E   (double)F   (double)G   (double)H   (double)J   (double)K     --Ax^2+By^2+Cz^2+Dxy+Exz+Fyz+Gx+Hy+Jz+K<1
+
+DEFINE_INSOLUBLE_PLANE_TO_TYPE                  (text)atom_type  (double)A    (double)B    (double)C    (double)D   (double)distance
+REMOVE_PLANE_TO_TYPE                            (text)atom_type  (double)A    (double)B    (double)C    (double)D   (double)distance
+ADD_PLANE_TO_TYPE                               (text)atom_type  (double)A    (double)B    (double)C    (double)D   (double)distance
+                                                     
+///////////by cells/////////////                                  
+                                                              
+DEFINE_AB_INSOLUBLE_CELLS_TO_TYPE               (text)atom_type  (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_b      --pos_cell start at 0
+DEFINE_BC_INSOLUBLE_CELLS_TO_TYPE               (text)atom_type  (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_b   (int)length_c      --pos_cell start at 0
+DEFINE_AC_INSOLUBLE_CELLS_TO_TYPE               (text)atom_type  (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_c      --pos_cell start at 0
+                        
+REMOVE_AB_PLANE_BY_CELLS_TO_TYPE                (text)atom_type  (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_b      --pos_cell start at 0                                       
+REMOVE_BC_PLANE_BY_CELLS_TO_TYPE                (text)atom_type  (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_b   (int)length_c      --pos_cell start at 0                                       
+REMOVE_AC_PLANE_BY_CELLS_TO_TYPE                (text)atom_type  (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_c      --pos_cell start at 0 
+
+ADD_AB_PLANE_BY_CELLS_TO_TYPE                   (text)atom_type  (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_b      --pos_cell start at 0                                       
+ADD_BC_PLANE_BY_CELLS_TO_TYPE                   (text)atom_type  (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_b   (int)length_c      --pos_cell start at 0                                       
+ADD_AC_PLANE_BY_CELLS_TO_TYPE                   (text)atom_type  (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_c      --pos_cell start at 0         
+
+ADD_CELL_TO_TYPE                                (text)atom_type  (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c                                     --pos_cell start at 0 
+REMOVE_CELL_TO_TYPE                             (text)atom_type  (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c                                     --pos_cell start at 0 
+
+
+
+
+/////////////////////////////////////////
+///////////MODIFY INITIAL SURFACE///////		--(***)
+///////////TO ALL/////////////
+
+REMOVE_AB_PLANE_FROM_SURFACE                    (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_b      --pos_cell start at 0
+ADD_AB_PLANE_TO_SURFACE                         (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_b      --pos_cell start at 0
+
+REMOVE_AC_PLANE_FROM_SURFACE                    (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_c      --pos_cell start at 0
+ADD_AC_PLANE_TO_SURFACE                         (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_c      --pos_cell start at 0
+
+REMOVE_BC_PLANE_FROM_SURFACE                    (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_b   (int)length_c      --pos_cell start at 0
+ADD_BC_PLANE_TO_SURFACE                         (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_b   (int)length_c      --pos_cell start at 0
+
+REMOVE_CUBE_FROM_SURFACE                        (double)x    (double)y    (double)z    (double)side
+ADD_CUBE_TO_SURFACE                             (double)x    (double)y    (double)z    (double)side
+
+REMOVE_XY_DISLOCATION_FROM_SURFACE              (double)x    (double)y   (double)radius     
+                                                (optional line) FROM_Z_TO_Z          (double)bot_z       (double)top_z
+                                                (optional line) ANGLE_XZ_ANGLE_YZ    (double)angle_xz    (double)angle_yz
+
+ADD_XY_DISLOCATION_TO_SURFACE                   (double)x    (double)y   (double)radius     
+                                                    (optional line) FROM_Z_TO_Z          (double)bot_z       (double)top_z
+                                                    (optional line) ANGLE_XZ_ANGLE_YZ    (double)angle_xz    (double)angle_yz
+
+REMOVE_XZ_DISLOCATION_FROM_SURFACE              (double)x    (double)z   (double)radius     
+                                                    (optional line) FROM_Y_TO_Y          (double)bot_y       (double)top_y
+                                                    (optional line) ANGLE_XY_ANGLE_ZY    (double)angle_xz    (double)angle_yz
+
+ADD_XZ_DISLOCATION_TO_SURFACE                   (double)x    (double)z   (double)radius     
+                                                    (optional line) FROM_Y_TO_Y          (double)bot_y       (double)top_y
+                                                    (optional line) ANGLE_XY_ANGLE_ZY    (double)angle_xz    (double)angle_yz
+
+REMOVE_YZ_DISLOCATION_FROM_SURFACE              (double)y    (double)z   (double)radius     
+                                                   (optional line) FROM_X_TO_X          (double)bot_x       (double)top_x
+                                                   (optional line) ANGLE_YX_ANGLE_ZX    (double)angle_yx    (double)angle_zx
+
+ADD_YZ_DISLOCATION_TO_SURFACE                   (double)y    (double)z   (double)radius     
+                                                   (optional line) FROM_X_TO_X          (double)bot_x       (double)top_x
+                                                   (optional line) ANGLE_YX_ANGLE_ZX    (double)angle_yx    (double)angle_zx
+
+REMOVE_PLANE_FROM_SURFACE                       (double)A    (double)B    (double)C    (double)D   (double)distance
+ADD_PLANE_TO_SURFACE                            (double)A    (double)B    (double)C    (double)D   (double)distance
+
+REMOVE_SPHERE_FROM_SURFACE                      (double)x    (double)y    (double)z    (double)radius 
+ADD_SPHERE_TO_SURFACE                           (double)x    (double)y    (double)z    (double)radius 
+
+REMOVE_ELLIPSOID_FROM_SURFACE                   (double)x    (double)y    (double)z    (double)radiusx     (double)radiusy    (double)radiusz
+ADD_ELLIPSOID_TO_SURFACE                        (double)x    (double)y    (double)z    (double)radiusx     (double)radiusy    (double)radiusz
+
+REMOVE_GENERAL_ELLIPSOID_TO_SURFACE             (double)A    (double)B    (double)C    (double)D    (double)E   (double)F   (double)G   (double)H   (double)J   (double)K     --Ax^2+By^2+Cz^2+Dxy+Exz+Fyz+Gx+Hy+Jz+K<1
+ADD_GENERAL_ELLIPSOID_TO_SURFACE                (double)A    (double)B    (double)C    (double)D    (double)E   (double)F   (double)G   (double)H   (double)J   (double)K     --Ax^2+By^2+Cz^2+Dxy+Exz+Fyz+Gx+Hy+Jz+K<1
+
+///////////TO TYPE/////////////
+
+REMOVE_AB_PLANE_FROM_SURFACE_TO_TYPE            (text)atom_type  (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_b      --pos_cell start at 0
+ADD_AB_PLANE_TO_SURFACE_TO_TYPE                 (text)atom_type  (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_b      --pos_cell start at 0
+
+REMOVE_AC_PLANE_FROM_SURFACE_TO_TYPE            (text)atom_type  (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_c      --pos_cell start at 0
+ADD_AC_PLANE_TO_SURFACE_TO_TYPE                 (text)atom_type  (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_a   (int)length_c      --pos_cell start at 0
+
+REMOVE_BC_PLANE_FROM_SURFACE_TO_TYPE            (text)atom_type  (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_b   (int)length_c      --pos_cell start at 0
+ADD_BC_PLANE_TO_SURFACE_TO_TYPE                 (text)atom_type  (int)pos_cell_a   (int)pos_cell_b   (int)pos_cell_c   (int)length_b   (int)length_c      --pos_cell start at 0
+
+REMOVE_CUBE_FROM_SURFACE_TO_TYPE                (text)atom_type  (double)x    (double)y    (double)z    (double)side
+ADD_CUBE_TO_SURFACE_TO_TYPE                     (text)atom_type  (double)x    (double)y    (double)z    (double)side
+
+REMOVE_XY_DISLOCATION_FROM_SURFACE_TO_TYPE      (text)atom_type  (double)x    (double)y   (double)radius     
+                                                    (optional line) FROM_Z_TO_Z          (double)bot_z       (double)top_z
+                                                    (optional line) ANGLE_XZ_ANGLE_YZ    (double)angle_xz    (double)angle_yz
+
+ADD_XY_DISLOCATION_TO_SURFACE_TO_TYPE           (text)atom_type  (double)x    (double)y   (double)radius     
+                                                    (optional line) FROM_Z_TO_Z          (double)bot_z       (double)top_z
+                                                    (optional line) ANGLE_XZ_ANGLE_YZ    (double)angle_xz    (double)angle_yz
+
+REMOVE_XZ_DISLOCATION_FROM_SURFACE_TO_TYPE      (text)atom_type  (double)x    (double)z   (double)radius     
+                                                    (optional line) FROM_Y_TO_Y          (double)bot_y       (double)top_y
+                                                    (optional line) ANGLE_XY_ANGLE_ZY    (double)angle_xz    (double)angle_yz
+
+ADD_XZ_DISLOCATION_TO_SURFACE_TO_TYPE           (text)atom_type   (double)x    (double)z   (double)radius     
+                                                    (optional line) FROM_Y_TO_Y          (double)bot_y       (double)top_y
+                                                    (optional line) ANGLE_XY_ANGLE_ZY    (double)angle_xz    (double)angle_yz
+
+REMOVE_YZ_DISLOCATION_FROM_SURFACE_TO_TYPE      (text)atom_type  (double)y    (double)z   (double)radius     
+                                                   (optional line) FROM_X_TO_X          (double)bot_x       (double)top_x
+                                                   (optional line) ANGLE_YX_ANGLE_ZX    (double)angle_yx    (double)angle_zx
+
+ADD_YZ_DISLOCATION_TO_SURFACE_TO_TYPE           (text)atom_type  (double)y    (double)z   (double)radius     
+                                                   (optional line) FROM_X_TO_X          (double)bot_x       (double)top_x
+                                                   (optional line) ANGLE_YX_ANGLE_ZX    (double)angle_yx    (double)angle_zx
+
+REMOVE_PLANE_FROM_SURFACE_TO_TYPE               (text)atom_type  (double)A    (double)B    (double)C    (double)D   (double)distance
+ADD_PLANE_TO_SURFACE_TO_TYPE                    (text)atom_type  (double)A    (double)B    (double)C    (double)D   (double)distance
+
+REMOVE_SPHERE_FROM_SURFACE_TO_TYPE              (text)atom_type  (double)x    (double)y    (double)z    (double)radius 
+ADD_SPHERE_TO_SURFACE_TO_TYPE                   (text)atom_type  (double)x    (double)y    (double)z    (double)radius 
+
+REMOVE_ELLIPSOID_FROM_SURFACE_TO_TYPE           (text)atom_type  (double)x    (double)y    (double)z    (double)radiusx     (double)radiusy    (double)radiusz
+ADD_ELLIPSOID_TO_SURFACE_TO_TYPE                (text)atom_type  (double)x    (double)y    (double)z    (double)radiusx     (double)radiusy    (double)radiusz
+
+REMOVE_GENERAL_ELLIPSOID_TO_SURFACE_TO_TYPE     (text)atom_type  (double)A    (double)B    (double)C    (double)D    (double)E   (double)F   (double)G   (double)H   (double)J   (double)K     --Ax^2+By^2+Cz^2+Dxy+Exz+Fyz+Gx+Hy+Jz+K<1
+ADD_GENERAL_ELLIPSOID_TO_SURFACE_TO_TYPE        (text)atom_type  (double)A    (double)B    (double)C    (double)D    (double)E   (double)F   (double)G   (double)H   (double)J   (double)K     --Ax^2+By^2+Cz^2+Dxy+Exz+Fyz+Gx+Hy+Jz+K<1
+
