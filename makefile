@@ -12,4 +12,4 @@ KIMERA: main.cpp
 
 # To compile kimera on Mac
 #KIMERA: main.cpp 
-#	clang++ -Wall -fexceptions -fopenmp -std=c++11 -O3 main.cpp src/*.cpp -Iinclude -o Kimera.exe -lomp
+#	clang++ -Wall -fexceptions -std=c++11 -O3 main.cpp src/*.cpp -Iinclude -o Kimera.exe -lomp
