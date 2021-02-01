@@ -6,8 +6,10 @@ KIMERA: main.cpp
 #KIMERA: main.cpp
 #	(path-to-compilers)/g++ -L/path-to-compilers/lib64/  -Wl,-rpath=(path-to-compilers)/lib64/   -Wall -fexceptions -fopenmp -std=c++11 -O3 include/*.h  main.cpp src/*.cpp -Iinclude -o Kimera.exe 
 	 
-
-	 
 # To compile kimera. Other example
 #KIMERA: main.cpp 
 #	icpc  -Wall -fexceptions -qopenmp -fast -std=c++11   include/*.h main.cpp src/*.cpp -Iinclude -o Kimera.exe
+
+# To compile kimera on Mac
+#KIMERA: main.cpp 
+#	clang++ -Wall -fexceptions -fopenmp -std=c++11 -O3 main.cpp src/*.cpp -Iinclude -o Kimera.exe -lomp
